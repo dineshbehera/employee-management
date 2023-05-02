@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee-management
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: employee-management
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: employee-management
+    spec:
+      containers:
+      - name: employee-management
+        image: dineshbehera/employee-management
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: employee-management
+  namespace: development
+spec:
+  selector:
+    app: employee-management
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: LoadBalancer
